@@ -20,6 +20,9 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 ext {
@@ -78,7 +81,11 @@ dependencies {
     //====Realtime Firebase Database===//
     compile 'com.google.firebase:firebase-database:10.0.1'
 
+    //====JUnit 4 framework===//
     testCompile 'junit:junit:4.12'
+
+    //====Mockito framework===//
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
 }
 
 
