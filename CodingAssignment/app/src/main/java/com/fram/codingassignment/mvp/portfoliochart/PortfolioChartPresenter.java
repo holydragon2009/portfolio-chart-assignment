@@ -1,6 +1,7 @@
 package com.fram.codingassignment.mvp.portfoliochart;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.fram.codingassignment.mvp.base.usecase.UseCase;
@@ -12,6 +13,7 @@ import com.fram.codingassignment.mvp.portfoliochart.model.Portfolio;
 import com.fram.codingassignment.mvp.portfoliochart.model.PortfolioRequest;
 import com.fram.codingassignment.mvp.portfoliochart.model.PortfolioResponse;
 import com.fram.codingassignment.util.Config;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -87,6 +89,17 @@ public class PortfolioChartPresenter implements IPortfolioChart.Presenter {
                 mPortfolioChartView.onFilterPortfolioError(Config.ERROR_CODE_DEFAULT);
             }
         });
+    }
+
+    @Override
+    public void syncPortfolioData(List<Portfolio> portfolioList, DatabaseReference firebaseDatabase) {
+        for(int i = 0; i < portfolioList.size(); i++){
+            Portfolio portfolio = portfolioList.get(i);
+            if(TextUtils.isEmpty(portfolio.getPortfolioId())){
+                portfolio.setPortfolioId(firebaseDatabase.child(Config.KEY_PORTFOLIOS).push().getKey());
+            }
+            firebaseDatabase.child(Config.KEY_PORTFOLIOS).child(portfolio.getPortfolioId()).setValue(portfolio);
+        }
     }
 
     @Override

@@ -22,7 +22,7 @@ android {
     }
 }
 
-ext{
+ext {
 //    support = '25.2.0'
     support = '25.3.1'
     play_services = '10.2.1'
@@ -38,11 +38,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "com.android.support:appcompat-v7:${support}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile("com.android.support:percent:${support}") {
         transitive = true
     }
-    testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //====RxJava===//
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -59,20 +58,28 @@ dependencies {
 
     //===HelloCharts===//
     compile 'com.github.lecho:hellocharts-android:v1.5.8'
-
+    
     //===MaterialDateTimePicker===//
     compile 'com.wdullaer:materialdatetimepicker:3.2.2'
-
-    //===MaterialDialog===//s
+    
+    //===MaterialDialog===//
     compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
-
+    
     //===Smooth Progress Bar ==/
     compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
 
     //===Scalable dp ===/
     compile 'com.intuit.sdp:sdp-android:1.0.4'
-
+    
     //====Butterknife====//
     compile "com.jakewharton:butterknife:${butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
+
+    //====Realtime Firebase Database===//
+    compile 'com.google.firebase:firebase-database:10.0.1'
+
+    testCompile 'junit:junit:4.12'
 }
+
+
+apply plugin: 'com.google.gms.google-services'

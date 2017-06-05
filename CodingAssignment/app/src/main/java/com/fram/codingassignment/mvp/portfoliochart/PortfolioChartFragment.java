@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fram.codingassignment.R;
@@ -21,6 +22,7 @@ import com.fram.codingassignment.mvp.base.usecase.UseCaseRxHandler;
 import com.fram.codingassignment.mvp.portfoliochart.domain.UcFilterPortfolioData;
 import com.fram.codingassignment.mvp.portfoliochart.model.Nav;
 import com.fram.codingassignment.mvp.portfoliochart.model.Portfolio;
+import com.fram.codingassignment.util.Config;
 import com.fram.codingassignment.util.StringUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -35,6 +37,11 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
@@ -67,6 +74,9 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
     @BindView(R.id.month_picker)
     Button vMonthPicker;
 
+    @BindView(R.id.toolbar_title)
+    TextView vToolbarTitle;
+
     private IPortfolioChart.Presenter mPresenter;
 
     private List<Portfolio> originPortfolioList = new ArrayList<>();
@@ -75,6 +85,9 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
     private UcFilterPortfolioData.FilterMode currentFilterMode = UcFilterPortfolioData.FilterMode.DAILY;
     private int currentMonthIndex = 0;
 
+    private DatabaseReference mFirebaseDatabase;
+    private FirebaseDatabase mFirebaseInstance;
+
     public static PortfolioChartFragment newInstance() {
         return new PortfolioChartFragment();
     }
@@ -82,13 +95,35 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_portfolio_chart_bk2, container, false);
+        View root = inflater.inflate(R.layout.fragment_portfolio_chart, container, false);
         ButterKnife.bind(this, root);
         getPresenter().subscribe();
 
+        setupFirebaseDb();
         readData();
 
         return root;
+    }
+
+    private void setupFirebaseDb(){
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        mFirebaseInstance = FirebaseDatabase.getInstance();
+        mFirebaseDatabase = mFirebaseInstance.getReference(Config.KEY_PORTFOLIOS);
+        mFirebaseInstance.getReference(Config.KEY_APP_TITLE).setValue(getString(R.string.portfolio_chart_title));
+        mFirebaseInstance.getReference(Config.KEY_APP_TITLE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "App title updated");
+                String appTitle = dataSnapshot.getValue(String.class);
+                vToolbarTitle.setText(appTitle);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e(TAG, "Failed to read app title value.", error.toException());
+            }
+        });
     }
 
     private void readData() {
@@ -278,8 +313,8 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
     @Override
     public void onReadPortfolioDataSuccess(List<Portfolio> portfolioList) {
         this.originPortfolioList = portfolioList;
-
-        mPresenter.filterPortfolioData(currentFilterMode, this.originPortfolioList, currentMonthIndex);
+        mPresenter.filterPortfolioData(this.currentFilterMode, this.originPortfolioList, this.currentMonthIndex);
+        mPresenter.syncPortfolioData(this.originPortfolioList, this.mFirebaseDatabase);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.fram.codingassignment.mvp.base.BasePresenter;
 import com.fram.codingassignment.mvp.base.BaseView;
 import com.fram.codingassignment.mvp.portfoliochart.domain.UcFilterPortfolioData;
 import com.fram.codingassignment.mvp.portfoliochart.model.Portfolio;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public interface IPortfolioChart {
     interface Presenter extends BasePresenter {
         void readPortfolioData(String json);
         void filterPortfolioData(UcFilterPortfolioData.FilterMode filterMode, List<Portfolio> originPortfolioList, int currentMonth);
+        void syncPortfolioData(List<Portfolio> portfolioList, DatabaseReference firebaseDatabase);
     }
 
 }

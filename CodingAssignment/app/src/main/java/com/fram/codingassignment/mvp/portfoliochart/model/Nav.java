@@ -1,11 +1,13 @@
 package com.fram.codingassignment.mvp.portfoliochart.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by thaile on 6/4/17.
  */
 
+@IgnoreExtraProperties
 public class Nav {
 
     @SerializedName("date")
@@ -21,6 +23,14 @@ public class Nav {
     private String hash;
 
     private long timestamp;
+
+    public Nav() {
+    }
+
+    public Nav(String date, float amount) {
+        this.date = date;
+        this.amount = amount;
+    }
 
     public String getDate() {
         return date;

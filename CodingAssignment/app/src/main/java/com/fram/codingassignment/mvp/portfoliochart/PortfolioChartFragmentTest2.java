@@ -74,7 +74,7 @@ public class PortfolioChartFragmentTest2 extends BackHandledFragment implements 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_portfolio_chart, container, false);
+        View root = inflater.inflate(R.layout.fragment_portfolio_chart_test1, container, false);
         ButterKnife.bind(this, root);
         getPresenter().subscribe();
 
