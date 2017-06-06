@@ -270,6 +270,15 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
                     } else {
                         set.setFillColor(Color.GREEN);
                     }
+                } else if(x == 3){
+                    set.setColor(Color.YELLOW);
+                    if (Utils.getSDKInt() >= 18) {
+                        // fill drawable only supported on api level 18 and above
+                        Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.fade_yellow);
+                        set.setFillDrawable(drawable);
+                    } else {
+                        set.setFillColor(Color.YELLOW);
+                    }
                 } else {
                     set.setColor(Color.RED);
                     if (Utils.getSDKInt() >= 18) {
