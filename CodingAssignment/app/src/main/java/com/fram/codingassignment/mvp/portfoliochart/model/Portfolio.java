@@ -5,6 +5,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by thaile on 6/4/17.
@@ -18,6 +19,8 @@ public class Portfolio implements ResponseValue {
 
     @SerializedName("navs")
     private List<Nav> navs;
+
+    private Map<String, Float> navHm;
 
     public Portfolio() {
     }
@@ -43,4 +46,11 @@ public class Portfolio implements ResponseValue {
         this.navs = navs;
     }
 
+    public Map<String, Float> getNavHm() {
+        return navHm;
+    }
+
+    public void setNavHm(Map<String, Float> navHm) {
+        this.navHm = navHm;
+    }
 }

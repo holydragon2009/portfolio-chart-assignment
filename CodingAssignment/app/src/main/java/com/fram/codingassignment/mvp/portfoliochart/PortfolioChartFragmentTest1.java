@@ -226,10 +226,10 @@ public class PortfolioChartFragmentTest1 extends BackHandledFragment implements 
         float sum = 0;
         int count = 0;
         for(Portfolio portfolio : portfolioList){
-            for(Nav nav : portfolio.getNavs()){
-                sum += nav.getAmount();
-                count ++;
-            }
+//            for(Nav nav : portfolio.getNavs()){
+//                sum += nav.getAmount();
+//                count ++;
+//            }
         }
         float averageAmount = (sum / count);
         setData(portfolioList.size(), averageAmount);

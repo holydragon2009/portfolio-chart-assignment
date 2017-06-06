@@ -252,8 +252,8 @@ public class PortfolioChartFragmentTest2 extends BackHandledFragment implements 
             for (int i = 0; i < numValues; i++) {
 //                values.add(new PointValue(i, (float) Math.random() * 100f));
 //            values.add(new PointValue(i, 0));
-                values.add(new PointValue(i, portfolioList.get(x).getNavs().get(i).getAmount()));
-                axisValues.add(new AxisValue(i).setLabel(String.valueOf(i + 1) + "th"));
+//                values.add(new PointValue(i, portfolioList.get(x).getNavs().get(i).getAmount()));
+//                axisValues.add(new AxisValue(i).setLabel(String.valueOf(i + 1) + "th"));
             }
         }
 

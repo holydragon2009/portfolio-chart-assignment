@@ -46,7 +46,9 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -153,10 +155,13 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
 
         float max = 0;
         for(Portfolio portfolio : portfolioList){
-            for(Nav nav : portfolio.getNavs()){
-                if(nav.getAmount() > max){
-                    max = nav.getAmount();
+            Iterator it = portfolio.getNavHm().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Float> pair = (Map.Entry<String, Float>)it.next();
+                if(pair.getValue() > max){
+                    max = pair.getValue();
                 }
+//                it.remove();
             }
         }
         Log.d(TAG, "max amount = " + max);
@@ -208,10 +213,15 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
 
         for(int x = 0; x < portfolioList.size(); x++) {
             ArrayList<Entry> values = new ArrayList<Entry>();
-            if(portfolioList.get(x).getNavs().size() > 0) {
-                for (int i = 0; i < count && i < portfolioList.get(x).getNavs().size(); i++) {
-                    float val = portfolioList.get(x).getNavs().get(i).getAmount();
+            if(portfolioList.get(x).getNavHm().size() > 0) {
+                Iterator it = portfolioList.get(x).getNavHm().entrySet().iterator();
+                int i = 0;
+                while (it.hasNext() && i < count) {
+                    Map.Entry<String, Float> pair = (Map.Entry<String, Float>)it.next();
+                    float val = pair.getValue();
                     values.add(new Entry(i, val, getResources().getDrawable(R.drawable.star)));
+//                    it.remove();
+                    i++;
                 }
                 valueHashMap.put(x, values);
             }
@@ -232,8 +242,10 @@ public class PortfolioChartFragment extends BackHandledFragment implements IPort
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             for(int x = 0; x < portfolioList.size(); x++) {
                 // create a dataset and give it a type
-                LineDataSet set = new LineDataSet(valueHashMap.get(x),
-                        "..." + portfolioList.get(x).getPortfolioId().substring(portfolioList.get(x).getPortfolioId().length() - 5));
+                String title = portfolioList.get(x).getPortfolioId().length() > 10 ?
+                        "..." + portfolioList.get(x).getPortfolioId().substring(portfolioList.get(x).getPortfolioId().length() - 5)
+                        : portfolioList.get(x).getPortfolioId();
+                LineDataSet set = new LineDataSet(valueHashMap.get(x), title);
 
                 set.setDrawIcons(false);
 
