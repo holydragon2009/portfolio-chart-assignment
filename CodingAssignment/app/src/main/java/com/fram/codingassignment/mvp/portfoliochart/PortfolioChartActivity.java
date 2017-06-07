@@ -23,7 +23,7 @@ public class PortfolioChartActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portfolio_chart);
 
-        mView = (PortfolioChartFragmentTest2) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        mView = (PortfolioChartFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (mView == null) {
             mView = PortfolioChartFragment.newInstance();
             ActivityUtils.addFragmentToActivity(
